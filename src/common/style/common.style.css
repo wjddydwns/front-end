@@ -1,0 +1,13 @@
+.category{
+    width: 500px;
+    display: flex;
+    height: 50px;
+    justify-content: space-around;
+    align-content: center;
+
+    button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,9 @@
+.Navbar_box{
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* 임시 */
+    border-bottom: 1px solid black; 
+}

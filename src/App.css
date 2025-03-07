@@ -1,7 +1,15 @@
 .App {
   text-align: center;
+  
 }
+@import "primereact/resources/themes/lara-light-indigo/theme.css"; /* 테마 */
+@import "primereact/resources/primereact.min.css"; /* PrimeReact 기본 스타일 */
+@import "primeicons/primeicons.css"; /* 아이콘 */
 
+*{
+  margin : 0;
+  padding : 0;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
