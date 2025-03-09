@@ -11,3 +11,50 @@
         cursor: pointer;
     }
 }
+.logo{
+    width: 150px;
+    height: 40px;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.link-area{
+    width: 100px;
+    height: 100%;
+}
+.showdiv{
+    display: flex;
+    justify-content: flex-end;
+    width: 50px;
+    height: 100vh;
+    background-color: #13264E;
+    cursor: pointer;
+    
+   
+}
+.offcanvas_box{
+    background-color: #1F232D;
+}
+.adminPage_logo{
+    
+        width: 300px;
+        height: 200px;
+        object-fit:contain;
+    
+}
+.admin_menu{
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+    width: 100%;
+    height: 50%;
+    background-color: #0e1d3c;
+    border: 1px solid white;
+}
+  

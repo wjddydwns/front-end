@@ -7,10 +7,11 @@ import { useNavigate } from "react-router"
 
 const Regist = () => {
     const dispatch = useDispatch()
+    // 1-1. 에러 상태처리
     const [passwordError, setPasswordError] = useState("")
     const [policyError, setPolicyError] = useState(false)
 
-    // 폼 데이터 상태
+    // 1-2. 폼에 있는 상태를 한번에 처리
     const [formData, setFormData] = useState({
         email: "",
         name: "",
@@ -20,7 +21,7 @@ const Regist = () => {
     });
 
     const navigate = useNavigate()
-
+    // 1-3. 
     const register = (event) => {
         event.preventDefault()
         const { name, email, password, confirmpassword, policy } = formData;
@@ -38,7 +39,7 @@ const Regist = () => {
         setPasswordError(""); // ✅ 공백 문자열이 아니라 빈 문자열로 설정
         setPolicyError(false); // ✅ 오류 초기화
 
-        // Redux 액션 호출
+        // Redux 액션 호출 => dipatch로 보내준다 .
         dispatch(registerUser({ name, email, password, navigate }));
     }
 
@@ -55,7 +56,7 @@ const Regist = () => {
             setFormData((prevState) => ({ ...prevState, [id]: value }));
         }
     }
-
+//1. 회원가입 -> ui/ux 제작 React-bootstrap Form 으로 제작
     return (
         <div className='regist_wrapper'>
             <Container className="w-50">
