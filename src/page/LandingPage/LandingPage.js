@@ -1,11 +1,13 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import CarouselPage from './components/CarouselPage'
+import SubMenu from './components/SubMenu'
 const LandingPage = () => {
   return (
-    <div style={{color:"gray"}}>
+    <Container>
       <CarouselPage/>
-    </div>
+      <SubMenu/>
+    </Container>
   )
 }
 

@@ -23,6 +23,7 @@ const Loginbar = () => {
     }
   return (
     
+  
     <Container className="d-flex justify-content-end">
       {user  && user.level  === "admin" && (
         <Link to="/admin/product" className="link-area">
@@ -40,9 +41,11 @@ const Loginbar = () => {
         <div onClick={onClickMypage}>{user.name}님</div>
         
         <div onClick={onclickLoguout}>로그아웃</div>
-        </div>) 
+        </div>
+        ) 
         :
-         (<div style={{
+        (
+         <div style={{
           display:"flex", 
           justifyContent:"space-between",
           alignItems:"center",

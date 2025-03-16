@@ -20,6 +20,7 @@ const AppLayout = ({children}) => {
     dispatch(loginWithToken())
   },[])
 
+  
   return (
     <div>
       {location.pathname.includes("admin") ? (

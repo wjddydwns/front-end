@@ -9,8 +9,8 @@ const Sidebar = () => {
   const navigate = useNavigate()
   // 옵션 객체 정의
   const options = {
-    scroll: false,
-    backdrop: false
+
+
   };
 
   const handleClose = () => setShow(false);
@@ -26,8 +26,9 @@ const Sidebar = () => {
       <Offcanvas className="offcanvas_box"show={show} onHide={handleClose} {...options}>
         <Offcanvas.Header closeButton className='bg-white' style={{borderBottom:"2px solid gray"}}>
          
-          <Offcanvas.Title>
-            <img className="adminPage_logo" src='https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/dECe/image/FJE1g1ITRbf8ktXbWdoVJNiWHlE.png'/>
+          <Offcanvas.Title onClick={()=>{navigate('/')}}>
+            <img className="adminPage_logo" src='https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/dECe/image/FJE1g1ITRbf8ktXbWdoVJNiWHlE.png'
+            style={{cursor:"pointer"}}/>
           </Offcanvas.Title>
           </Offcanvas.Header>
           <Container>
