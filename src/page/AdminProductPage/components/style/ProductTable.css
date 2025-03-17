@@ -1,0 +1,9 @@
+.product-thumbnail {
+    display: flex;
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 8px; /* 둥근 모서리 */
+    border: 1px solid #ddd; /* 테두리 */
+  }
+  

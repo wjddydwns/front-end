@@ -2,12 +2,12 @@ import React from 'react'
 import '../style/common.style.css'
 const Category = () => {
     const menuList = [
-        "브랜드",
-        "여성",
-        "남성",
-        "잡화/슈즈",
+        "홈",
+        "오늘행사",
+        "FOR YOU",
         "베스트",
-        "골프"
+        "N배송",
+        "패션뷰티"
     ]
   return (
     <div className='category'>

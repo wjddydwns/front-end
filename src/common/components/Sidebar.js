@@ -33,13 +33,17 @@ const Sidebar = () => {
           </Offcanvas.Header>
           <Container>
         <Offcanvas.Body>
-          <div className='admin_menu'>상품 페이지</div>
+          <div className='admin_menu' 
+          style={{cursor:"pointer"}}
+          onClick={()=>{navigate('/admin/product')}}>상품 페이지</div>
         </Offcanvas.Body>
         <Offcanvas.Body>
-          <div className='admin_menu' onClick={()=>{navigate('/admin/ad')}}>광고 페이지</div>
+          <div className='admin_menu' style={{cursor:"pointer"}}
+          onClick={()=>{navigate('/admin/ad')}}>광고 페이지</div>
         </Offcanvas.Body>
         <Offcanvas.Body>
-          <div className='admin_menu'>오더 페이지</div>
+          <div className='admin_menu'
+          style={{cursor:"pointer"}}>오더 페이지</div>
         </Offcanvas.Body>
           </Container>
       </Offcanvas>

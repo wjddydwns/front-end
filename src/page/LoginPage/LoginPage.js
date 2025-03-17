@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { loginWithEmail } from '../../features/user/userSlice'
-
+import './LoginPage.css'
 
 const LoginPage = () => {
 const dispatch  = useDispatch()
@@ -28,7 +28,7 @@ if(user){
     navigate('/')
 }
   return (
-    <Container>
+    <Container className='w-50 login_box' >
         <h1>로그인</h1>
         {loginError && (
             <div className='error-message'>

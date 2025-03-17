@@ -9,6 +9,7 @@ import { loginWithToken } from '../features/user/userSlice';
 import { useLocation } from 'react-router-dom';
 import Sidebar  from '../common/components/Sidebar';
 import { Col, Row } from 'react-bootstrap';
+import Footer from '../common/components/Footer';
 
 
 const AppLayout = ({children}) => {
@@ -41,6 +42,7 @@ const AppLayout = ({children}) => {
         <Category/>
         </div>
         {children}
+        <Footer/>
         </>
    
       )}

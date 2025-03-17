@@ -9,11 +9,12 @@ import adSlice from './ad/adSlice'
 const store = configureStore({
     reducer : {
         user : userSlice,
-        product : productSlice,
+        products : productSlice,
         cart : cartSlice,
         ui :  uiSlice,
         order : orderSlice,
         ad : adSlice
+        
     }
 })
 
