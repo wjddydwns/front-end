@@ -8,6 +8,7 @@ import AdminProductPage from '../page/AdminProductPage/AdminProductPage'
 import AdminadPage from '../page/AdminAdPage/AdminAdPage'
 import ProductDetailPage from '../page/ProductDetailPage/ProductDetailPage'
 import CartPage from '../page/CartPage/CartPage'
+import PaymentPage from '../page/PaymentPage/PaymentPage'
 const AppRouter = () => {
   return (
     <Routes>
@@ -16,6 +17,7 @@ const AppRouter = () => {
         <Route path='/login' element={<LoginPage/>}/>
         <Route path="/product/:id" element={<ProductDetailPage/>}/>
         <Route path='/cart' element={<CartPage/>}/>
+        <Route path='/order' element={<PaymentPage/>}/>
         <Route element={<PrivateRoute permissionLevel="admin"/>}>
           <Route path="/admin/product" element={<AdminProductPage/>}/>
           <Route path="/admin/ad" element={<AdminadPage/>}/>

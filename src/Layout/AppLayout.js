@@ -11,6 +11,7 @@ import Sidebar  from '../common/components/Sidebar';
 import { Col, Row } from 'react-bootstrap';
 import Footer from '../common/components/Footer';
 import TotalPrice from '../page/CartPage/components/TotalPrice';
+import Purchasebar from '../page/PaymentPage/components/PurchaseBar';
 
 
 const AppLayout = ({children}) => {
@@ -50,6 +51,9 @@ const AppLayout = ({children}) => {
       )}
     {location.pathname.includes("cart") ? (
     <TotalPrice totalPrice={totalPrice} />
+  ) : null}
+      {location.pathname.includes("order") ? (
+    <Purchasebar totalPrice={totalPrice} />
   ) : null}
 
     
