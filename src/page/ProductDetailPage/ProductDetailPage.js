@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProductDetail } from "../../features/product/productSlice";
 import { Col, Container, Row, Button, Form } from "react-bootstrap";
 import "./ProductDetailPage.css";
 import PurchaseBtn from "../../common/Button/PurchaseBtn";
+import { addToCart } from "../../features/cart/cartSlice";
 
 const ProductDetail = () => {
   const { id } = useParams(); // URL에서 상품 ID 가져오기
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getProductDetail(id));
@@ -18,18 +21,24 @@ const ProductDetail = () => {
   const { selectedProduct, loading, error } = useSelector((state) => state.products || {});
 
   // 🔹 선택된 사이즈 및 수량 상태
-  const [selectedSize, setSelectedSize] = useState(""); 
+  const [size, setSize] = useState(""); 
   const [quantity, setQuantity] = useState(1);
 
   // 🔹 장바구니 추가 함수
   const handlePurchase = () => {
-    if (!selectedSize) {
+    if (!size) {
       alert("사이즈를 선택해주세요.");
       return;
     }
-    alert(`구매 페이지로 이동: ${selectedProduct.name} - 사이즈: ${selectedSize}, 수량: ${quantity}`);
+    if (!user) {
+      alert("로그인 후 이용해주세요.");
+      navigate('/login');
+      return;
+    }
+    dispatch(addToCart({ id, size, qty: quantity })); // ✅ 수량도 함께 전달
+    alert("장바구니에 추가 되었습니다.")
   };
-  
+
 
   return (
     <Container>
@@ -68,15 +77,15 @@ const ProductDetail = () => {
                   <Form.Group controlId="sizeSelect">
                     <Form.Label>사이즈 선택</Form.Label>
                     <Form.Select
-                      value={selectedSize}
-                      onChange={(e) => setSelectedSize(e.target.value)}
+                      value={size}
+                      onChange={(e) => setSize(e.target.value)}
                       required
                     >
                       <option value="">사이즈 선택</option>
                       {selectedProduct.stock &&
-                        Object.keys(selectedProduct.stock).map((size) => (
-                          <option key={size} value={size}>
-                            {size} (재고: {selectedProduct.stock[size]})
+                        Object.keys(selectedProduct.stock).map((optionSize) => ( // ✅ 변수명 변경
+                          <option key={optionSize} value={optionSize}>
+                            {optionSize} (재고: {selectedProduct.stock[optionSize]})
                           </option>
                         ))}
                     </Form.Select>
@@ -88,17 +97,18 @@ const ProductDetail = () => {
                     <Form.Control
                       type="number"
                       value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
+                      onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                       min="1"
-                      max={selectedProduct.stock?.[selectedSize] || 1} // 선택한 사이즈의 재고보다 많은 수량을 선택하지 못하도록 제한
+                      max={selectedProduct.stock?.[size] || 1} // ✅ 선택한 사이즈의 재고를 반영
                     />
                   </Form.Group>
                   <p style={{marginTop:"10px"}}>{selectedProduct.description}</p>
                   {/* 🔹 장바구니 버튼 */}
                   <div style={{marginTop:"100px"}}>
-                  <PurchaseBtn onClick={handlePurchase} />
+                  <PurchaseBtn onClick={handlePurchase}>
+                    장바구니에 담기
+                  </PurchaseBtn>
                   </div>
-                  
                 </div>
               </Col>
             </div>

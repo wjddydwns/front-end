@@ -10,12 +10,14 @@ import { useLocation } from 'react-router-dom';
 import Sidebar  from '../common/components/Sidebar';
 import { Col, Row } from 'react-bootstrap';
 import Footer from '../common/components/Footer';
+import TotalPrice from '../page/CartPage/components/TotalPrice';
 
 
 const AppLayout = ({children}) => {
   const location = useLocation()
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const {totalPrice} = useSelector((state)=>state.cart)
 
   useEffect(()=>{
     dispatch(loginWithToken())
@@ -46,6 +48,10 @@ const AppLayout = ({children}) => {
         </>
    
       )}
+    {location.pathname.includes("cart") ? (
+    <TotalPrice totalPrice={totalPrice} />
+  ) : null}
+
     
 
     </div>

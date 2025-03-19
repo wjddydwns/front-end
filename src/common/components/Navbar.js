@@ -5,9 +5,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FaShippingFast } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 
 const MyNavbar = () => {
+  const navigate = useNavigate()
   return (
     <Container>
     <Navbar expand="lg" className="px-4 py-2 ">
@@ -25,7 +27,7 @@ const MyNavbar = () => {
       <div style={{width:"150px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <FaShippingFast size={24}/>
         <FaRegHeart size={24}/>
-        <FaCartPlus size={24}/>
+        <FaCartPlus size={24} onClick={()=>{navigate('/cart')}}/>
       </div>
   </Navbar>
   </Container>
