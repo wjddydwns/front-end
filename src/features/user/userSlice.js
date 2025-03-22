@@ -34,7 +34,7 @@ export const loginWithToken = createAsyncThunk("user/loginWithToken",
     async (_,{rejectWithValue})=>{
         try{
             const res = await api.get("/user/myaccount")
-            console.log("tokkken",res)
+            // console.log("tokkken",res)
             return res.data
             
         }
