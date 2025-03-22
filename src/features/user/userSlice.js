@@ -5,7 +5,7 @@ export const registerUser = createAsyncThunk("user/registerUser",
     async ({ email, name, password, navigate }, { rejectWithValue }) => {
         try {
             const res = await api.post("/user", { email, name, password });
-            console.log(res);
+            // console.log(res);
             navigate("/login"); // 회원가입 후 로그인 페이지로 이동
             return res.data.data;
         } catch (error) {
@@ -18,7 +18,7 @@ export const loginWithEmail = createAsyncThunk("user/loginWithEmail",
     async ({ email, password }, { rejectWithValue }) => {
         try {
             const res = await api.post("/user/login", { email, password });
-            console.log("login", res);
+            // console.log("login", res);
             
             // 백엔드에서 받은 토큰을 세션스토리지에 저장
             sessionStorage.setItem("token", res.data.token);

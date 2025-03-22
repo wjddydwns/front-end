@@ -7,7 +7,7 @@ export const createAd = createAsyncThunk(
   async ({ ad_path }, { rejectWithValue }) => {
     try {
       const res = await api.post("/ad", { ad_path });
-      console.log("ad", res);
+      // console.log("ad", res);
       return res.data; // 응답 데이터 반환
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error occurred");
@@ -21,7 +21,7 @@ export const getAdList = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/ad/getad"); // URL 수정
-      console.log("ads", res.data.ads)
+      // console.log("ads", res.data.ads)
       return res.data.ads || []; // 응답 구조가 다를 경우 대비하여 안전 처리
     
     } catch (error) {
