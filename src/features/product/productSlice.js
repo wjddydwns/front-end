@@ -41,6 +41,18 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async (productData, { rejectWithValue }) => {
+    try {
+      const res = await api.put(`/product/${productData.id}`, productData); // 상품 ID를 포함하여 업데이트 요청
+      return res.data; // 업데이트된 상품 데이터 반환
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "상품 수정 실패");
+    }
+  }
+);
+
 // ✅ Redux Slice 생성
 const productSlice = createSlice({
   name: "products",
@@ -50,7 +62,11 @@ const productSlice = createSlice({
     loading: false, // 로딩 상태
     error: null, // 에러 상태
   },
-  reducers: {}, // 일반적인 reducer 추가 가능
+  reducers: {
+    setSelectedProduct : (state,action)=>{
+      state.selectedProduct = action.payload
+    }
+  }, // 일반적인 reducer 추가 가능
   extraReducers: (builder) => {
     builder
       // 📌 상품 등록 요청
@@ -91,8 +107,23 @@ const productSlice = createSlice({
       .addCase(getProductDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = state.products.map((product) =>
+          product._id === action.payload._id ? action.payload : product
+        );
+      })
+      
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+      
   },
 });
-
+export const {setSelectedProduct} = productSlice.actions
 export default productSlice.reducer;

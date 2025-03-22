@@ -31,8 +31,10 @@ const PaymentPage = () => {
   })
   const { cartList, totalPrice } = useSelector((state) => state.cart);
 
-  console.log("📌 현재 장바구니 상태:", cartList);
-  console.log("📌 현재 totalPrice:", totalPrice);
+  const{user}= useSelector((state)=>state.user)
+  if(!user){
+    navigate('/login')
+  }
     const handleFormChange = (event)=>{
     const{name,value} = event.target
     setShipInfo({...shipInfo,[name]:value})

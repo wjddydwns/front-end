@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getCart } from '../../features/cart/cartSlice'
 import CartProductCard from './components/CartProductCard'
-import { Container } from 'react-bootstrap'
-import TotalPrice from './components/TotalPrice';
+
 const CartPage = () => {
     const dispatch =  useDispatch()
     const navigate = useNavigate()

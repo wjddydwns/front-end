@@ -26,23 +26,39 @@ export const addToCart = createAsyncThunk(
     }
 );
 
+// 🔹 장바구니 목록 조회 API 요청
 export const getCart = createAsyncThunk(
     "cart/getCart",
-    async(_,{rejectWithValue})=>{
-        try{
-            const res = await api.get("/cart")
-            if(res.status !== 200){
-                throw new Error(res.error)
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await api.get("/cart");
+            if (res.status !== 200) {
+                throw new Error(res.error);
             }
-            console.log("장바구니 목록",res.data.data)
-            return res.data.data
-        }
-        catch(error){
+            console.log("장바구니 목록", res.data.data);
+            return res.data.data;
+        } catch (error) {
             return rejectWithValue(error.message);
-
         }
     }
-)
+);
+
+// 🔹 장바구니 아이템 삭제 API 요청 (오류 수정)
+export const deleteCartItem = createAsyncThunk(
+    "cart/deleteCartItem",
+    async (id, { rejectWithValue }) => { // ✅ `_id` → `id`로 수정
+        try {
+            const res = await api.delete(`/cart/${id}`);
+            if (res.status !== 200) {
+                throw new Error(res.error);
+            }
+            return id; // ✅ 삭제된 항목의 ID 반환
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const cartSlice = createSlice({
     name: "cart",
     initialState,
@@ -80,24 +96,41 @@ const cartSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getCart.pending, (state)=>{
-                state.loading = true
+            .addCase(getCart.pending, (state) => {
+                state.loading = true;
             })
-            .addCase(getCart.fulfilled, (state,action) =>{
+            .addCase(getCart.fulfilled, (state, action) => {
                 state.loading = false;
-                state.error = ""
-                state.cartList =  action.payload || []
+                state.error = "";
+                state.cartList = action.payload || [];
                 state.totalPrice = state.cartList.reduce(
-                    (total,item)=>total + item.productId.price * item.qty, 0
-                )
+                    (total, item) => total + (item.productId?.price || 0) * item.qty, 0
+                );
                 state.cartItemCount = state.cartList.reduce(
-                    (total,item) => total + item.qty, 0
-                )
+                    (total, item) => total + item.qty, 0
+                );
             })
-            .addCase(getCart.rejected,(state,action)=>{
+            .addCase(getCart.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload
+                state.error = action.payload;
             })
+
+            // 📌 장바구니 삭제 로직 수정
+            .addCase(deleteCartItem.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = "";
+
+                const deleteItem = state.cartList.find((product) => product._id === action.payload);
+                if (deleteItem) {
+                    state.totalPrice -= (deleteItem.productId?.price || 0) * deleteItem.qty;
+                    state.cartItemCount -= deleteItem.qty;
+                }
+                state.cartList = state.cartList.filter((product) => product._id !== action.payload);
+            })
+            .addCase(deleteCartItem.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
     },
 });
 

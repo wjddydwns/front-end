@@ -1,109 +1,120 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Row, Col, FormControl } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { createProduct, getProducts } from "../../../features/product/productSlice"; // Redux 액션 import
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createProduct,
+  updateProduct,
+} from "../../../features/product/productSlice";
 
-const ProductModal = ({ show, handleClose }) => {
+const initialFormData = {
+  name: "",
+  sku: "",
+  stock: [],
+  image: "",
+  description: "",
+  category: [],
+  status: "active",
+  price: 0,
+};
+
+const ProductModal = ({ mode, showModal, handleClose }) => {
   const dispatch = useDispatch();
+  const { selectedProduct } = useSelector((state) => state.products);
 
-  // 초기 상태
-  const [sku, setSku] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState([]);
-  const [status, setStatus] = useState("active");
+  const [formData, setFormData] = useState({ ...initialFormData });
 
-  // 재고 항목 추가
-  const handleAddStock = () => {
-    setStock([...stock, { size: "", quantity: "" }]);
-  };
+  useEffect(() => {
 
-  // 재고 항목 수정
-  const handleStockChange = (index, field, value) => {
-    const updatedStock = [...stock];
-    updatedStock[index][field] = value;
-    setStock(updatedStock);
-  };
 
-  // 재고 항목 삭제
-  const handleRemoveStock = (index) => {
-    setStock(stock.filter((_, i) => i !== index));
-  };
+    if (showModal) {
+      if (mode === "edit" && selectedProduct) {
+        const stockArray = Object.entries(selectedProduct.stock || {}).map(
+          ([size, quantity]) => ({
+            size,
+            quantity,
+          })
+        );
 
-  // 상품 등록 핸들러
-  const handleSubmit = (event) => {
-    event.preventDefault(); // 기본 폼 제출 방지
-
-    // 재고 객체 변환 { "S": 10, "M": 5 } 형태로 변환
-    const formattedStock = stock.reduce((acc, item) => {
-      if (item.size && item.quantity) {
-        acc[item.size] = parseInt(item.quantity, 10);
+        setFormData({
+          ...selectedProduct,
+          stock: stockArray,
+        });
+      } else {
+        setFormData({ ...initialFormData });
       }
+    }
+  }, [showModal, mode, selectedProduct]);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map(
+      (option) => option.value
+    );
+    setFormData({ ...formData, category: selectedOptions });
+  };
+
+  const handleStockChange = (index, field, value) => {
+    const newStock = [...formData.stock];
+    newStock[index][field] = field === "quantity" ? Number(value) : value;
+    setFormData({ ...formData, stock: newStock });
+  };
+
+  const handleAddStock = () => {
+    setFormData({
+      ...formData,
+      stock: [...formData.stock, { size: "", quantity: 0 }],
+    });
+  };
+
+  const handleRemoveStock = (index) => {
+    const newStock = formData.stock.filter((_, i) => i !== index);
+    setFormData({ ...formData, stock: newStock });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const stockObject = formData.stock.reduce((acc, item) => {
+      if (item.size) acc[item.size] = item.quantity;
       return acc;
     }, {});
 
-    const productData = {
-      sku,
-      name,
-      image,
-      category,
-      description,
-      price: Number(price), // 숫자로 변환
-      stock: formattedStock,
-      status,
+    const payload = {
+      ...formData,
+      stock: stockObject,
     };
 
-    console.log("Product Data:", productData);
+    if (mode === "new") {
+      dispatch(createProduct(payload));
+    } else {
+      dispatch(updateProduct({ ...payload, id: selectedProduct._id }));
+    }
 
-    dispatch(createProduct(productData))
-      .unwrap()
-      .then(() => {
-        alert("상품이 등록되었습니다.");
-        handleClose(); // 모달 닫기
-        // 입력 필드 초기화
-        setSku("");
-        setName("");
-        setImage("");
-        setCategory("");
-        setDescription("");
-        setPrice("");
-        setStock([]);
-        setStatus("active");
-      })
-      .catch((error) => {
-        alert("상품 등록 실패: " + error);
-      });
+    handleClose();
   };
 
-
   return (
-    <Modal
-      show={show}
-      onHide={handleClose}
-      aria-labelledby="example-custom-modal-styling-title"
-      size="xl"
-    >
+    <Modal show={showModal} onHide={handleClose} size="xl">
       <Modal.Header closeButton>
-        <Modal.Title id="example-custom-modal-styling-title">
-          상품 등록
-        </Modal.Title>
+        <Modal.Title>{mode === "edit" ? "상품 수정" : "상품 등록"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <Form onSubmit={handleSubmit} className="form-container">
+        <Form onSubmit={handleSubmit}>
           {/* SKU & 상품명 */}
           <Row className="mb-3">
             <Form.Group as={Col} controlId="sku">
-              <Form.Label>Sku</Form.Label>
+              <Form.Label>SKU</Form.Label>
               <FormControl
                 type="text"
-                placeholder="SKU를 입력하세요."
-                value={sku}
-                onChange={(e) => setSku(e.target.value)}
+                value={formData.sku}
+                onChange={handleChange}
                 required
+                disabled={mode === "edit"}
               />
             </Form.Group>
 
@@ -111,9 +122,8 @@ const ProductModal = ({ show, handleClose }) => {
               <Form.Label>상품명</Form.Label>
               <FormControl
                 type="text"
-                placeholder="상품명을 입력하세요."
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={formData.name}
+                onChange={handleChange}
                 required
               />
             </Form.Group>
@@ -125,24 +135,21 @@ const ProductModal = ({ show, handleClose }) => {
               <Form.Label>가격</Form.Label>
               <FormControl
                 type="number"
-                placeholder="가격을 입력하세요."
-                min="0"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                value={formData.price}
+                onChange={handleChange}
                 required
               />
             </Form.Group>
           </Row>
 
-          {/* 이미지 입력 */}
+          {/* 이미지 URL */}
           <Row className="mb-3">
             <Form.Group as={Col} controlId="image">
               <Form.Label>이미지</Form.Label>
               <FormControl
                 type="text"
-                placeholder="이미지url을 입력하세요."
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
+                value={formData.image}
+                onChange={handleChange}
                 required
               />
             </Form.Group>
@@ -153,96 +160,90 @@ const ProductModal = ({ show, handleClose }) => {
             <Form.Group className="mb-3" controlId="description">
               <Form.Label>상품 설명</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="상품을 설명해주세요"
                 as="textarea"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
                 rows={3}
+                value={formData.description}
+                onChange={handleChange}
+                required
               />
             </Form.Group>
           </Row>
 
-          {/* 카테고리 선택 */}
+          {/* 카테고리 & 상태 */}
           <Row className="mb-3">
             <Form.Group as={Col} controlId="category">
               <Form.Label>카테고리</Form.Label>
               <Form.Select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
+                multiple
+                value={formData.category}
+                onChange={handleCategoryChange}
               >
-                <option value="" disabled>카테고리 선택</option>
-                <option value="drink">음료 (Drink)</option>
-                <option value="food">식품 (Food)</option>
-                <option value="closet">의류 (Closet)</option>
+                <option value="drink">음료</option>
+                <option value="food">식품</option>
+                <option value="closet">의류</option>
               </Form.Select>
             </Form.Group>
 
-            {/* 상태 선택 (Active / Disactive) */}
             <Form.Group as={Col} controlId="status">
               <Form.Label>상품 상태</Form.Label>
               <Form.Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                value={formData.status}
+                onChange={handleChange}
                 required
               >
-                <option value="active">활성화 (Active)</option>
-                <option value="disactive">비활성화 (Disactive)</option>
+                <option value="active">활성화</option>
+                <option value="disactive">비활성화</option>
               </Form.Select>
             </Form.Group>
           </Row>
 
-          {/* 재고 추가 기능 */}
+          {/* 재고 관리 */}
           <Row>
             <Form.Group className="mb-3" controlId="stock">
-              <Form.Label className="mb-1">재고</Form.Label>
-              <Button size="sm" onClick={handleAddStock}>
+              <Form.Label>재고</Form.Label>
+              <Button size="sm" onClick={handleAddStock} className="ms-2 mb-2">
                 추가 +
               </Button>
-              <div className="mt-2">
-                {stock.map((item, index) => (
-                  <Row key={index} className="align-items-center mt-2">
-                    <Col sm={4}>
-                      <Form.Select
-                        value={item.size}
-                        onChange={(e) => handleStockChange(index, "size", e.target.value)}
-                        required
-                      >
-                        <option value="" disabled>
-                          사이즈 선택
-                        </option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                      </Form.Select>
-                    </Col>
-                    <Col sm={4}>
-                      <FormControl
-                        type="number"
-                        placeholder="수량 입력"
-                        min="0"
-                        value={item.quantity}
-                        onChange={(e) => handleStockChange(index, "quantity", e.target.value)}
-                        required
-                      />
-                    </Col>
-                    <Col sm={2}>
-                      <Button variant="danger" size="sm" onClick={() => handleRemoveStock(index)}>
-                        삭제
-                      </Button>
-                    </Col>
-                  </Row>
-                ))}
-              </div>
+              {formData.stock.map((item, index) => (
+                <Row key={index} className="align-items-center mb-2">
+                  <Col sm={4}>
+                    <Form.Select
+                      value={item.size}
+                      onChange={(e) =>
+                        handleStockChange(index, "size", e.target.value)
+                      }
+                    >
+                      <option value="">사이즈 선택</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                    </Form.Select>
+                  </Col>
+                  <Col sm={4}>
+                    <FormControl
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleStockChange(index, "quantity", e.target.value)
+                      }
+                    />
+                  </Col>
+                  <Col sm={2}>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleRemoveStock(index)}
+                    >
+                      삭제
+                    </Button>
+                  </Col>
+                </Row>
+              ))}
             </Form.Group>
           </Row>
 
-          {/* 등록 버튼 */}
           <Button variant="primary" type="submit">
-            등록
+            {mode === "edit" ? "수정" : "등록"}
           </Button>
         </Form>
       </Modal.Body>
