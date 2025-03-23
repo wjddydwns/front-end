@@ -65,6 +65,7 @@
       padding: 6px;
     }
   }
+
   
   /* 🔹 이미지 스타일 */
   .today_product img {
@@ -79,6 +80,11 @@
       height: 100px;
     }
   }
+  @media (max-width: 390px) {
+    .today_product img {
+      height: 80px;
+    }
+  }
   
   
   /* 🔹 상품명 스타일 (자동 줄바꿈) */
@@ -90,6 +96,16 @@
     white-space: normal; /* 자동 줄바꿈 허용 */
     overflow-wrap: break-word; /* 긴 단어가 있을 경우 강제 줄바꿈 */
   }
-  
+    
+  @media (max-width: 576px) {
+    .today_product p {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 390px) {
+    .today_product p {
+      font-size: 12px;
+    }
+  }
 
   
