@@ -43,7 +43,7 @@ const ProductDetail = () => {
 
         {selectedProduct && (
           <Row className="product-detail">
-            <Col lg={6} className="mb-4">
+            <Col lg={4} className="mb-4">
               <img
                 src={selectedProduct.image}
                 alt={selectedProduct.name}
