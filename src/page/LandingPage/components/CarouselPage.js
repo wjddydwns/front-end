@@ -15,7 +15,7 @@ const CarouselPage = () => {
 
   return (
     <div className="ad">
-      <Container className="d-flex justify-content-center align-items-center">
+      <Container className="d-flex justify-content-center align-items-center"fluid="sm">
         {loading && <p>로딩 중...</p>}
         {error && <p style={{ color: "red" }}>오류 발생: {error}</p>}
         {ads.length > 0 ? (

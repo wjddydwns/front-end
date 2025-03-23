@@ -14,24 +14,24 @@ const TodayProduct = () => {
   }, [dispatch]);
 
   return (
-    <div className="TodayProduct_box">
-      <div className="today_title">
-        <p>오늘의 행사</p> &nbsp;놓치지 마세요
+<div className="TodayProduct_box">
+  <div className="today_title">
+    <p>오늘의 행사</p>&nbsp;놓치지 마세요
+  </div>
+
+  <div className="today_product_list">
+    {products.length > 0 ? (
+      products.map((item) => (
+        <ProductCard key={item.id} item={item} />
+      ))
+    ) : (
+      <div className="text-align-center empty-bag">
+        등록된 상품이 없습니다.
       </div>
-      <div style={{display:"flex",justifyContent:"space-around"}}>
-      {products.length > 0 ? (
-        products.map((item)=>(
-            <ProductCard item={item}/>
-        ))
-      ): (
-        <div className='text-align-center empty-bag'>
-          등록된 상품이 없습니다.
-        </div>
-      )
-      
-      }
-      </div>
-   </div>
+    )}
+  </div>
+</div>
+
   );
 };
 

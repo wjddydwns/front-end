@@ -1,5 +1,6 @@
 import React from 'react'
 import '../style/common.style.css'
+import { Container } from 'react-bootstrap'
 const Category = () => {
     const menuList = [
         "홈",
@@ -10,11 +11,14 @@ const Category = () => {
         "패션뷰티"
     ]
   return (
-    <div className='category'>
+    <Container>
+       <div className='category'>
      {menuList.map((menu,index)=>(
         <button key={index}>{menu}</button>
      ))}
     </div>
+    </Container>
+   
   )
 }
 

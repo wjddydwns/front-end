@@ -8,7 +8,7 @@ import Loginbar from '../common/components/Loginbar';
 import { loginWithToken } from '../features/user/userSlice';
 import { useLocation } from 'react-router-dom';
 import Sidebar  from '../common/components/Sidebar';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import Footer from '../common/components/Footer';
 import TotalPrice from '../page/CartPage/components/TotalPrice';
 import Purchasebar from '../page/PaymentPage/components/PurchaseBar';

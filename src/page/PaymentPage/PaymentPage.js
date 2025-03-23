@@ -1,144 +1,124 @@
-import React, { useEffect, useState } from 'react'
-import PaymentForm from './components/PaymentForm'
-import { Col, Container, Form, Row } from 'react-bootstrap'
-import './PaymentPage.css'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { cc_expires_format } from '../../utils/number'
-import { useSelector } from 'react-redux'
-import OrderReceipt from './components/OrderReceipt'
-import { getCart } from '../../features/cart/cartSlice'
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Form, Row } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { getCart } from '../../features/cart/cartSlice';
+import { cc_expires_format } from '../../utils/number';
+
+import PaymentForm from './components/PaymentForm';
+import OrderReceipt from './components/OrderReceipt';
+
+import './PaymentPage.css';
+
 const PaymentPage = () => {
-  const dispatch = useDispatch()
-  const {orderNum} = useSelector((state)=>state.order)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { cartList, totalPrice } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
+  const { orderNum } = useSelector((state) => state.order);
+
+  const [cardValue, setCardValue] = useState({
+    cvc: '',
+    expiry: '',
+    focus: '',
+    name: '',
+    number: '',
+  });
+
+  const [shipInfo, setShipInfo] = useState({
+    name: '',
+    contact: '',
+    address: '',
+    city: '',
+    zip: '',
+  });
+
   useEffect(() => {
     dispatch(getCart());
-}, [dispatch]);
-  const [cardValue,setCardValue] = useState({
-    cvc:"",
-    expiry :"",
-    focus:"",
-    name:"",
-    number:""
-  })
-  const navigate = useNavigate()
-  const [shipInfo,setShipInfo] = useState({
-    name : "",
-    Contact : "",
-    address:"",
-    city:"",
-    zip:""
-  })
-  const { cartList, totalPrice } = useSelector((state) => state.cart);
+  }, [dispatch]);
 
-  const{user}= useSelector((state)=>state.user)
-  if(!user){
-    navigate('/login')
-  }
-    const handleFormChange = (event)=>{
-    const{name,value} = event.target
-    setShipInfo({...shipInfo,[name]:value})
-  }
-  const handlePaymentInfoChange = (event)=>{
-    const {name,value} = event.target
-    if(name==="expiry"){
-      let newValue = cc_expires_format(value)
-      setCardValue({...cardValue,[name]:newValue})
-      return
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
     }
-    setCardValue({...cardValue,[name]:value})
-  }
+  }, [user, navigate]);
 
-  const handleInputFocus = (event)=>{
-    setCardValue({...cardValue, focus:event.target.name})
-  }
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setShipInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePaymentInfoChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'expiry') {
+      setCardValue((prev) => ({ ...prev, [name]: cc_expires_format(value) }));
+    } else {
+      setCardValue((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleInputFocus = (e) => {
+    setCardValue((prev) => ({ ...prev, focus: e.target.name }));
+  };
+
   return (
-    <div style={{backgroundColor:"#f3f5f7"}}>
+    <div style={{ backgroundColor: '#f3f5f7', paddingTop: '32px', paddingBottom: '60px' }}>
       <Container>
-        <Row>
-        <div className='info_box'> 
-        <h3 className='mb-2'>배송 주소</h3>
-        <div>
-          <Form>
-            <Row>
-              <Form.Group controlId='lastName'>
-                <Form.Label>이름</Form.Label>
-                <Form.Control
-                type='text'
-                onChange={handleFormChange}
-                name='name'
-                required/>
-              </Form.Group>
-            </Row>
-          </Form>
-        </div>
-        <div>
-              <Form.Group controlId='contact'>
-                <Form.Label>연락처</Form.Label>
-                <Form.Control
-                type='text'
-                onChange={handleFormChange}
-                name='contact'
-                required/>
-              </Form.Group>
-        </div>
-        <div>
-              <Form.Group controlId='address'>
-                <Form.Label>주소</Form.Label>
-                <Form.Control
-                type='text'
-                onChange={handleFormChange}
-                name="address"
-                required/>
-              </Form.Group>
-        </div>
-        <div>
-            <Row>
-              <Col>
-              <Form.Group controlId='city'>
-                <Form.Label>도시</Form.Label>
-                <Form.Control
-                type='text'
-                onChange={handleFormChange}
-                name='city'
-                required/>
-              </Form.Group>
-              </Col>
-            
-            <Col>
-            <Form.Group controlId='zip'>
-                <Form.Label>우편번호</Form.Label>
-                <Form.Control
-                type='text'
-                onChange={handleFormChange}
-                name='zip'
-                required/>
-              </Form.Group>
-              </Col>
-             
-            </Row>
-        </div>
-        </div>
-        <Col lg={5} style={{ display: "flex", justifyContent: "center" }}> 
-          <OrderReceipt cartList={cartList} totalPrice={totalPrice}/>
-        </Col>
-        <div style={{paddingBottom:"50px"}}>
-        <PaymentForm
-        cardValue={cardValue}
-        handleInputFocus={handleInputFocus}
-        handlePaymentInfoChange={handlePaymentInfoChange}/>
-        </div>
-    
-        
-        </Row>
-        
-       
-      
-       
-      </Container>
-       
-    </div>
-  )
-}
+        <Row className="gx-5 gy-4">
+          {/* 왼쪽: 배송 주소 + 카드 결제 */}
+          <Col lg={8}>
+            <div className="info_box mb-4">
+              <h4 className="mb-3">배송 주소</h4>
+              <Form>
+                <Form.Group className="mb-3" controlId="name">
+                  <Form.Label>이름</Form.Label>
+                  <Form.Control type="text" name="name" onChange={handleFormChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="contact">
+                  <Form.Label>연락처</Form.Label>
+                  <Form.Control type="text" name="contact" onChange={handleFormChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="address">
+                  <Form.Label>주소</Form.Label>
+                  <Form.Control type="text" name="address" onChange={handleFormChange} required />
+                </Form.Group>
+                <Row>
+                  <Col md={6}>
+                    <Form.Group className="mb-3" controlId="city">
+                      <Form.Label>도시</Form.Label>
+                      <Form.Control type="text" name="city" onChange={handleFormChange} required />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3" controlId="zip">
+                      <Form.Label>우편번호</Form.Label>
+                      <Form.Control type="text" name="zip" onChange={handleFormChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
 
-export default PaymentPage
+            {/* 카드 정보 */}
+            <div className="card_info_box">
+              <PaymentForm
+                cardValue={cardValue}
+                handleInputFocus={handleInputFocus}
+                handlePaymentInfoChange={handlePaymentInfoChange}
+              />
+            </div>
+          </Col>
+
+          {/* 오른쪽: 주문 요약 */}
+          <Col lg={4}>
+            <OrderReceipt cartList={cartList} totalPrice={totalPrice} />
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default PaymentPage;

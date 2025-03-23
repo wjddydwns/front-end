@@ -1,5 +1,6 @@
 import React from "react";
 import "../style/SubMenu.css";
+import { Container } from "react-bootstrap";
 
 const SubMenu = () => {
   const SubMenuList = [
@@ -29,7 +30,8 @@ const SubMenu = () => {
   ];
 
   return (
-    <div className="sub_menu">
+    <Container>
+      <div className="sub_menu">
       {SubMenuList.map((menu, index) => (
         <div key={index} className="sub_menu_item">
           <div className="sub_menu_icon">
@@ -41,8 +43,9 @@ const SubMenu = () => {
           </div>
           <div className="sub_menu_text">{menu}</div>
         </div>
-      ))}
-    </div>
+      ))}https://shop-phinf.pstatic.net/20241011_273/1728640344619f140C_PNG/EC8A88ED8DBCECA081EBA6BD%2BEC82ACEC9DB4ECA688%2BECA1B0ECA0.png?type=f156_png
+      </div>
+    </Container>
   );
 };
 

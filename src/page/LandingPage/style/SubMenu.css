@@ -1,37 +1,72 @@
 .sub_menu {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-top: 30px;
+  display: flex;
+  justify-content: flex-start; /* space-around → flex-start 가 일반적 */
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px;
+  margin-top: 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; /* iOS 자연 스크롤 */
+}
+
+.sub_menu_item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 12px;
+  transition: transform 0.2s ease-in-out;
+  width: 120px; 
+
+  @media (max-width: 992px) { 
+    width: 100px;
+    padding: 8px;
   }
-  
-  .sub_menu_item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 12px;
-    transition: transform 0.2s ease-in-out;
+
+  @media (max-width: 768px) { 
+    width: 80px;
+    padding: 6px;
   }
-  
-  .sub_menu_item:hover {
-    transform: scale(1.1);
+
+  @media (max-width: 576px) { 
+    width: 70px;
+    padding: 4px;
+    font-size: 0.85rem;
   }
-  
-  .sub_menu_icon img {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
+
+  &:hover {
+    transform: scale(1.05);
   }
-  
-  .sub_menu_text {
-    margin-top: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
+}
+
+
+.sub_menu_item:hover {
+  transform: scale(1.1);
+}
+
+.sub_menu_icon img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+
+  @media (max-width: 768px) {
+    width: 48px;
+    height: 48px;
   }
-  
+
+  @media (max-width: 576px) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+.sub_menu_text {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}

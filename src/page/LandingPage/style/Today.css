@@ -1,11 +1,9 @@
 .TodayProduct_box {
-    margin-top: 100px;
+    margin-top: 20px;
     padding: 20px;
     background: #f8f9fa;
     border-radius: 8px;
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
+  
   }
 
   .today_title{ 
@@ -17,6 +15,29 @@
         font-weight: bold;
      } 
     }
+    .today_product_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+      width: 100%;
+      justify-items: center;
+      align-items: stretch;
+    }
+    
+    @media (max-width: 768px) {
+      .today_product_list {
+        gap: 16px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .today_product_list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+    
   
   /* 🔹 상품 카드 스타일 */
   .today_product {

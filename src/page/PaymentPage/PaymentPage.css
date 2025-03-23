@@ -1,8 +1,23 @@
-.info_box{
-    width: 700px;
-    height: 100%;
+.info_box {
+    width: 100%;
+    max-width: 700px;
     background-color: #fff;
     border-radius: 12px;
-    margin-top: 12px;
-    padding : 20px 16px;
-}
+    margin: 12px auto;
+    padding: 20px 16px;
+  }
+  
+  /* 반응형 대응 */
+  @media (max-width: 768px) {
+    .info_box {
+      padding: 16px 12px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .info_box {
+      padding: 12px 10px;
+      border-radius: 8px;
+    }
+  }
+  
