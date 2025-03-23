@@ -8,7 +8,7 @@
     height: 80px;
     background-color: black;
     color: white;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
 }
 .bar_order{
@@ -16,13 +16,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 224px;
-    height: 48px;
+    width: 100px;
+    height: 28px;
     background-color: #03C75A;
-    border-radius: 7px;
+    border-radius: 10px;
 }
 .flex_box{
     display: flex;
     width: 500px;
     justify-content: space-around;
 }
+.bar_order:hover {
+    background-color: #02b054;
+    transform: scale(1.03);
+  }
+  
