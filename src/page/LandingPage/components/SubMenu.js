@@ -43,7 +43,7 @@ const SubMenu = () => {
           </div>
           <div className="sub_menu_text">{menu}</div>
         </div>
-      ))}https://shop-phinf.pstatic.net/20241011_273/1728640344619f140C_PNG/EC8A88ED8DBCECA081EBA6BD%2BEC82ACEC9DB4ECA688%2BECA1B0ECA0.png?type=f156_png
+      ))}
       </div>
     </Container>
   );

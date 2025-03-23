@@ -38,6 +38,10 @@
     width: 120px;
     height: 40px;
   }
+  @media (max-width: 390px) { 
+    width: 100px;
+    height: 40px;
+  }
 }
 
 
@@ -115,4 +119,15 @@
     color: #03c75a;
     font-weight: bold;
   }
-  
+  /* iOS 자동 링크 스타일 무력화 */
+a[href^="tel"],
+a[href^="mailto"],
+a[href^="sms"],
+a[href^="http"],
+a[data-dt-element] {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
