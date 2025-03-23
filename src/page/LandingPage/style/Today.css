@@ -32,7 +32,7 @@
     
     @media (max-width: 576px) {
       .today_product_list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 12px;
       }
     }
@@ -73,6 +73,13 @@
     object-fit: cover;
     border-radius: 8px;
   }
+  
+  @media (max-width: 576px) {
+    .today_product img {
+      height: 100px;
+    }
+  }
+  
   
   /* 🔹 상품명 스타일 (자동 줄바꿈) */
   .today_product p {
