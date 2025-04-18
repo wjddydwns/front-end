@@ -1,3 +1,14 @@
+MERN 스택 기반의 반응형 전자상거래 웹 애플리케이션입니다 상품 목록 및 상세 조회 장바구니 담기 및 수정 결제 페이지 구현 관리자Admin 페이지를 통한 상품광고 등록수정삭제 등 쇼핑몰의
+주요 기능을 구현하였습니다
+
+
+📦 👉
+배포 사이
+[*https://n-store-demo.netlify.app/*](https://n-store-demo.netlify.app/)
+
+백엔드 저장소 바로가기
+https://github.com/wjddydwns/back-end
+
 📦 사용된 주요 라이브러리
 React
 
